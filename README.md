@@ -4,18 +4,23 @@ This project contains an example of using `pybind11` to embedded the Python inte
 
 ## Set-up Dev Environment
 
-### Set-up Python dependencies
-The Python dependenices are listed in `requirements.txt` (this project has been tested with Python 3.10.2). To use `venv` to set-up the dependencies:
-- Ensure that you have Python Virtual Environment installed: `sudo apt install python3.9-venv`
-- Set-up virtual environment: `python3 -m venv .venv`
-- Activiate the virtual environment: `source ./.venv/bin/activate`
-- Install Python dependencies: `pip install -r requirements.txt`
-
 ### Set-up C++ dependencies
-The only C++ dependency is `pybind11`. To use `vcpkg` to set-up the dependencies:
+#### PyBind11
+To use vcpkg to satisfy the `pybind11` dependency do the following:
 - Get the vcpkg repo: `git clone https://github.com/Microsoft/vcpkg.git`
 - Set-up the vcpkg repo: `./vcpkg/bootstrap-vcpkg.sh`
 - Install pybind11: `./vcpkg/vcpkg install pybind11`
+
+#### MPI
+To satisfy the MPI dependency one could install OpenMPI as follows:
+- `sudo apt install openmpi-bin libopenmpi-dev`
+
+### Set-up Python dependencies (ensure that the MPI is installed first)
+The Python dependenices are listed in `requirements.txt` (this project has been tested with Python 3.10.2). To use `venv` to set-up the dependencies:
+- Ensure that you have Python Virtual Environment installed: `sudo apt install python3.10-venv`
+- Set-up virtual environment: `python3 -m venv .venv`
+- Activiate the virtual environment: `source ./.venv/bin/activate`
+- Install Python dependencies: `pip install -r requirements.txt`
 
 ## Build
 
