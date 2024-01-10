@@ -19,7 +19,7 @@ std::vector<T> copy_array(const py::array_t<T>& array) {
     return std::vector<T>{array.data(), array.data()+array.nbytes()/array.itemsize()};
 }
 
-py::object create_constant_height_initial_condition(py::module_& funcs, int nx, int ny) {
+py::object create_constant_height_initial_condition(py::module_& py_swe_interface, int nx, int ny) {
     py::array_t<double> u{{nx+2, ny+2}};
     py::array_t<double> v{{nx+2, ny+2}};
     py::array_t<double> h{{nx+2, ny+2}};
@@ -33,7 +33,7 @@ py::object create_constant_height_initial_condition(py::module_& funcs, int nx, 
             view_h(i,j) = 5000;
         }
     }
-    return funcs.attr("State")(u, v, h);
+    return py_swe_interface.attr("State")(u, v, h);
 }
 
 int main(int argc, char** argv) {
@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     auto comm_int = py::int_{MPI_Comm_c2f(comm)};
 
     // import the py_swe_interface
-    py::module_ funcs = py::module_::import("python_module.py_swe_interface");
+    py::module_ py_swe_interface = py::module_::import("python_module.py_swe_interface");
 
     // create the geometry
     int cxx_nx = 100, cxx_ny = 100;
@@ -57,16 +57,16 @@ int main(int argc, char** argv) {
     auto nx = py::int_(cxx_ny);
     auto xmax = py::float_(100000.0);
     auto ymax = py::float_(100000.0);
-    auto geometry = funcs.attr("create_geometry")(comm_int, nx, ny, xmax, ymax);
+    auto geometry = py_swe_interface.attr("create_geometry")(comm_int, nx, ny, xmax, ymax);
 
     // create the initial condition
     auto s0 = [&]() {
         if(create_ic_on_cpp_side) {
             std::cout << "creating initial condition with constant 5000 height field\n";
-            return create_constant_height_initial_condition(funcs, cxx_nx, cxx_ny);
+            return create_constant_height_initial_condition(py_swe_interface, cxx_nx, cxx_ny);
         } else {
             std::cout << "creating initial condition with tsunami pulse height field\n";
-            return funcs.attr("create_tsunami_pulse_initial_condition")(geometry);
+            return py_swe_interface.attr("create_tsunami_pulse_initial_condition")(geometry);
         }
     }();
     
@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
 
     // run the model
     auto root = py::int_(0);
-    funcs.attr("step_model")(geometry, s0, comm_int, root);
+    py_swe_interface.attr("step_model")(geometry, s0, comm_int, root);
 
     MPI_Finalize();
 
