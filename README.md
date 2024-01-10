@@ -6,6 +6,7 @@ This project contains an example of using `pybind11` to embedded the Python inte
 
 ### Set-up Python dependencies
 The Python dependenices are listed in `requirements.txt` (this project has been tested with Python 3.10.2). To use `venv` to set-up the dependencies:
+- Ensure that you have Python Virtual Environment installed: `sudo apt install python3.9-venv`
 - Set-up virtual environment: `python3 -m venv .venv`
 - Activiate the virtual environment: `source ./.venv/bin/activate`
 - Install Python dependencies: `pip install -r requirements.txt`
@@ -22,6 +23,20 @@ The only C++ dependency is `pybind11`. To use `vcpkg` to set-up the dependencies
 - `mkdir build`
 - `cd build`
 - `cmake ../src -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake`
+
+#### Errors:
+- If you have an error like:
+```
+CMake Error in CMakeLists.txt:
+Imported target "pybind11::module" includes non-existent path
+  "/usr/include/python3.10"
+in its INTERFACE_INCLUDE_DIRECTORIES.  Possible reasons include:
+* The path was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and references files it does not
+provide.
+```
+Then this suggests that the Python development headers might not be installed. You can install the headers using apt, `sudo apt install python3-dev`.
 
 ### Cmake build
 - `cmake --build .`
