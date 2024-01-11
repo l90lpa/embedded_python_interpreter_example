@@ -16,6 +16,7 @@ opt-einsum==3.3.0
 packaging==23.2
 Pillow==10.1.0
 py_swe @ git+https://github.com/l90lpa/py_swe.git@59d5ca979dd00c6ca635168601211ab614b55987
+pybind11==2.11.1
 pyparsing==3.1.1
 python-dateutil==2.8.2
 scipy==1.11.3

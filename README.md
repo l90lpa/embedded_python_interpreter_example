@@ -24,10 +24,13 @@ The Python dependenices are listed in `requirements.txt` (this project has been 
 
 ## Build
 
+### Cmake Config Search Path - PyBind11
+With pybind11 installed through pip, its CMake `.config` may not be in the config search paths. To find we can use the command: `pybind11-config --cmakedir`.
+
 ### CMake configure
 - `mkdir build`
 - `cd build`
-- `cmake ../src -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake`
+- `cmake ../src -DCMAKE_PREFIX_PATH=$(pybind11-config --cmakedir)`
 
 #### Errors:
 - If you have an error like:
@@ -48,4 +51,6 @@ Then this suggests that the Python development headers might not be installed. Y
 
 ## Run
 
-To run the program, one should start from a terminal with the virtual environment activated, because by default embedded Python interpreter will have access to the terminals environment (environment variables). Also we run the program with the current working directory set to the root of the project, because by default the current working directory is added to the python module search path. Thus we use the following to run the program: `./build/cpp_python`
+The build generates a executable artifact, `cpp_python`. By default the embedded Python interpreter will have access to the terminals environment (environment variables), therefore it will have access to the Python search path list `PYTHONPATH`. Hence if our Python dependencies are installed in some virtual environment, that is active when running the program `cpp_python` then the import statement `` while work. We can manually add to this searhc path list as follows `export PYTHONPATH=$PYTHONPATH:/path/to/some/directory`. Additionally, the current working directory is included in `sys.path` when using the embedded interpreter, see [pybind11 importing modules](https://pybind11.readthedocs.io/en/latest/advanced/embedding.html#importing-modules). 
+
+Since we are loading a module `python_module` that is not going to be in the search paths by default, we either need to run the executable from the project root (to take advantage of the current working directory being a search path), or modify `PYTHONPATH`
