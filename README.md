@@ -4,14 +4,7 @@ This project contains an example of using `pybind11` to embedded the Python inte
 
 ## Set-up Dev Environment
 
-### Set-up C++ dependencies
-#### PyBind11
-To use vcpkg to satisfy the `pybind11` dependency do the following:
-- Get the vcpkg repo: `git clone https://github.com/Microsoft/vcpkg.git`
-- Set-up the vcpkg repo: `./vcpkg/bootstrap-vcpkg.sh`
-- Install pybind11: `./vcpkg/vcpkg install pybind11`
-
-#### MPI
+### MPI
 To satisfy the MPI dependency one could install OpenMPI as follows:
 - `sudo apt install openmpi-bin libopenmpi-dev`
 
