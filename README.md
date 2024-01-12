@@ -1,4 +1,4 @@
-# Embedded Python Interpreter Example
+# PyBind11 Embedded Python Example
 
 This project contains an example of using `pybind11` to embedded the Python interpreter into a C++ program, and call python functons from C++.
 
